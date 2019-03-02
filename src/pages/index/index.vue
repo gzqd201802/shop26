@@ -66,9 +66,9 @@ export default {
     //   this.imgUrls = res.data.message;
     // });
 
-    request.get("home/swiperdata").then(res=>{
-      this.imgUrls = res.data.message;
-    })
+    request.get("home/swiperdata").then( res =>{
+        this.imgUrls = res.data.message;
+    });
 
     // 导航分类
     request("https://autumnfish.cn/wx/api/public/v1/home/catitems").then(res=>{
@@ -79,7 +79,6 @@ export default {
     request("https://autumnfish.cn/wx/api/public/v1/home/floordata").then(res=>{
       this.floors = res.data.message;
     });
-
 
   }
 }

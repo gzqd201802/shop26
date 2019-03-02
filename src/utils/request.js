@@ -19,14 +19,14 @@ function request(url, method = "GET", data = {}, header = {}) {
   });
 }
 
-request.baseURL = 'https://autumnfish.cn/wx/api/public/v1/';
+request.baseURL = "https://autumnfish.cn/wx/api/public/v1/";
 
-request.get = (url,data) =>{
-  return request( request.baseURL + url, "GET" ,data);
+request.get = (url, data) => {
+  return request(request.baseURL + url, "GET", data);
 };
 
-request.post = (url,data) =>{
-  return request( request.baseURL + url, "POST" ,data);
+request.post = (url, data) => {
+  return request(request.baseURL + url, "POST", data);
 };
 
 // 导出，暴露 request 函数
