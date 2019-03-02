@@ -12,9 +12,23 @@
             </view>
           </block>
         </scroll-view>
-        <view class="cate-right">
-          右边
-        </view>
+        <scroll-view scroll-y class="cate-right">
+          <block v-for="(item,index) in rightData" :key="index">
+            <view class="floor">
+              <view class="floor-title">
+                {{ item.cat_name }}
+              </view>
+              <view class="floor-list">
+                <block v-for="(subitem,subindex) in item.children" :key="subindex">
+                  <view class="floor-list-item">
+                    <image :src="'https://autumnfish.cn/wx/'+subitem.cat_icon"></image>
+                    <view>{{ subitem.cat_name }}</view>
+                  </view>
+                </block>
+              </view>
+            </view>
+          </block>
+        </scroll-view>
       </view>
     </div>
 </template>
@@ -27,7 +41,8 @@ export default {
   data(){
     return{
       cateList: [],
-      tabIndex: 0
+      tabIndex: 0,
+      rightData:[]
     }
   },
   components: {
@@ -37,6 +52,7 @@ export default {
   mounted () {
     getCateList().then(res=>{
       this.cateList = res.data.message;
+      this.rightData = this.cateList[0].children;
     })
   },
   methods: {
@@ -50,7 +66,6 @@ export default {
 <style>
   .cate{
     display: flex;
-    background-color: pink;
     /* 定位盒子拉伸 */
     position: fixed;
     left: 0;
@@ -86,5 +101,35 @@ export default {
   }
   .cate-right{
     flex: 1;
+    height: 100%;
   }
+  .floor-title{
+    text-align: center;
+    margin: 30rpx 0;
+  }
+  .floor-title::before,
+  .floor-title::after{
+    content: "/";
+    color:#666;
+    margin: 0 20rpx;
+  }
+
+
+  .floor-list{
+    display:flex;
+    flex-wrap: wrap;
+  }
+  .floor-list-item{
+    width: 33.3333%;
+    text-align: center;
+    font-size: 28rpx;
+    color:#333;
+    margin: 20rpx 0;
+  }
+    /* 分类右边 */
+  .floor-list-item image{
+    width: 120rpx;
+    height: 100rpx;
+  }
+
 </style>
