@@ -3,13 +3,13 @@
       <!-- 3. 使用组件 -->
       <search></search>
       <view class="cate">
-        <view class="cate-left">
-          <block v-for="(item,index) in [1,2,3,4,5,5,6,6,6,6,6,6,6,1,6,6,6,6]" :key="index">
+        <scroll-view scroll-y class="cate-left">
+          <block v-for="(item,index) in cateList" :key="index">
             <view class="cate-left-item">
-              大家电{{index}}
+              {{ item.cat_name }}
             </view>
           </block>
-        </view>
+        </scroll-view>
         <view class="cate-right">
           右边
         </view>
@@ -19,11 +19,22 @@
 
 <script>
 // 1. 导入
-import Search from "@/components/search"
+import Search from "@/components/search";
+import { getCateList } from "@/api";
 export default {
+  data(){
+    return{
+      cateList: []
+    }
+  },
   components: {
     // 2. 注册
     Search
+  },
+  mounted () {
+    getCateList().then(res=>{
+      this.cateList = res.data.message;
+    })
   }
 }
 </script>
@@ -43,9 +54,12 @@ export default {
 
   .cate-left{
     width: 200rpx;
+    height: 100%;
+    /* overflow-y:auto; */
   }
   .cate-left-item{
-    height: 100rpx;
+    line-height: 100rpx;
+    text-align: center;
     background-color: #f4f4f4;
   }
   .cate-right{

@@ -7,3 +7,6 @@ export const getSwiper = () => request.get("home/swiperdata");
 export const getCate = () => request.get("home/catitems");
 // 首页楼层
 export const getFloor = () => request.get("home/floordata");
+
+// 分类数据
+export const getCateList = () => request.get("categories");
