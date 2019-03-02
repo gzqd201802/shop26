@@ -50,7 +50,8 @@
 </template>
 
 <script>
-import request from "../../utils/request";
+import request from "@/utils/request";
+import { getSwiper,getCate,getFloor } from "@/api";
 export default {
   data(){
     return{
@@ -61,24 +62,17 @@ export default {
   },
   mounted () {
 
-    // 轮播图的请求
-    // request("https://autumnfish.cn/wx/api/public/v1/home/swiperdata").then(res=>{
-    //   this.imgUrls = res.data.message;
-    // });
 
-    request.get("home/swiperdata").then( res =>{
-        this.imgUrls = res.data.message;
+    getSwiper().then(res=>{
+      this.imgUrls = res.data.message;
     });
-
-    // 导航分类
-    request("https://autumnfish.cn/wx/api/public/v1/home/catitems").then(res=>{
+    getCate().then(res=>{
       this.catList = res.data.message;
     });
-
-    // 楼层数据请求
-    request("https://autumnfish.cn/wx/api/public/v1/home/floordata").then(res=>{
+    getFloor().then(res=>{
       this.floors = res.data.message;
     });
+
 
   }
 }
