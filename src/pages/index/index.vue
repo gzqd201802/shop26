@@ -1,12 +1,7 @@
 <template>
     <view>
       <!-- 搜索框 -->
-      <view class="search">
-        <view class="search-in">
-          <icon type="search" size="16"> </icon>
-          <text>搜索</text>
-        </view>
-      </view>
+      <search></search>
       <!-- 轮播图 -->
       <swiper
         indicator-dots
@@ -52,6 +47,8 @@
 <script>
 import request from "@/utils/request";
 import { getSwiper,getCate,getFloor } from "@/api";
+// 2. 导入组件
+import Search from "@/components/search";
 export default {
   data(){
     return{
@@ -59,6 +56,10 @@ export default {
       catList:[],
       floors:[]
     }
+  },
+  // 3. 注册组件
+  components: {
+    Search
   },
   mounted () {
 
@@ -78,24 +79,7 @@ export default {
 </script>
 
 <style>
-  .search{
-    background-color: #eb4450;
-    padding: 20rpx;
-  }
 
-  .search-in{
-    height: 60rpx;
-    border-radius:10rpx;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color:#666;
-    font-size:30rpx;
-  }
-  .search-in icon{
-      margin-right: 10rpx;
-  }
 
   .slide-image,
   swiper{

@@ -1,12 +1,17 @@
 <template>
     <div>
-      <h1>分类页</h1>
+      <!--  -->
+      <search></search>
+      <h1>分类页1</h1>
     </div>
 </template>
 
 <script>
+import Search from "@/components/search"
 export default {
-
+  components: {
+    Search
+  }
 }
 </script>
 
