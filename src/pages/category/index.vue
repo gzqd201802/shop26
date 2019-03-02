@@ -59,7 +59,7 @@ export default {
     // 点击左侧Tab兰的时候出发的事件函数
     changeIndex(index){
       this.tabIndex = index;
-      // 先吧右侧的数据清空
+      // 先把右侧的数据清空，确保点击的时候打开的是头部
       this.rightData = [];
       // 清空后才设置数据，让右侧默认滚动到顶部
       setTimeout(()=>{
