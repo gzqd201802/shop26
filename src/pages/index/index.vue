@@ -73,7 +73,6 @@ export default {
       this.floors = res.data.message;
     });
 
-
   }
 }
 </script>
