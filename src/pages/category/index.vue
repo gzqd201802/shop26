@@ -52,18 +52,30 @@ export default {
   mounted () {
     getCateList().then(res=>{
       this.cateList = res.data.message;
-      this.rightData = this.cateList[0].children;
+      this.rightData = this.cateList[this.tabIndex].children;
     })
   },
   methods: {
+    // 点击左侧Tab兰的时候出发的事件函数
     changeIndex(index){
       this.tabIndex = index;
+      // 先吧右侧的数据清空
+      this.rightData = [];
+      // 清空后才设置数据，让右侧默认滚动到顶部
+      setTimeout(()=>{
+        this.rightData = this.cateList[this.tabIndex].children;
+      },0);
     }
   }
 }
 </script>
 
 <style>
+  .search{
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+  }
   .cate{
     display: flex;
     /* 定位盒子拉伸 */
@@ -110,7 +122,7 @@ export default {
   .floor-title::before,
   .floor-title::after{
     content: "/";
-    color:#666;
+    color:#ccc;
     margin: 0 20rpx;
   }
 
