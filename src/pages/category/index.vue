@@ -5,7 +5,9 @@
       <view class="cate">
         <scroll-view scroll-y class="cate-left">
           <block v-for="(item,index) in cateList" :key="index">
-            <view class="cate-left-item">
+            <view class="cate-left-item"
+              :class="{ 'active' : index == tabIndex }"
+              @tap="changeIndex(index)">
               {{ item.cat_name }}
             </view>
           </block>
@@ -24,7 +26,8 @@ import { getCateList } from "@/api";
 export default {
   data(){
     return{
-      cateList: []
+      cateList: [],
+      tabIndex: 0
     }
   },
   components: {
@@ -35,6 +38,11 @@ export default {
     getCateList().then(res=>{
       this.cateList = res.data.message;
     })
+  },
+  methods: {
+    changeIndex(index){
+      this.tabIndex = index;
+    }
   }
 }
 </script>
@@ -61,6 +69,20 @@ export default {
     line-height: 100rpx;
     text-align: center;
     background-color: #f4f4f4;
+    position: relative;
+  }
+  .cate-left-item.active{
+    color:#eb4450;
+    background-color: #fff;
+  }
+  .cate-left-item.active::before{
+    content: "";
+    width: 10rpx;
+    background-color: #eb4450;
+    position: absolute;
+    top:20rpx;
+    bottom:20rpx;
+    left:0;
   }
   .cate-right{
     flex: 1;
