@@ -20,7 +20,7 @@
               </view>
               <view class="floor-list">
                 <block v-for="(subitem,subindex) in item.children" :key="subindex">
-                  <view class="floor-list-item">
+                  <view class="floor-list-item" @tap="gotoList(subitem.cat_name)">
                     <image :src="'https://autumnfish.cn/wx/'+subitem.cat_icon"></image>
                     <view>{{ subitem.cat_name }}</view>
                   </view>
@@ -65,6 +65,11 @@ export default {
       setTimeout(()=>{
         this.rightData = this.cateList[this.tabIndex].children;
       },0);
+    },
+    // 点击跳转到列表页
+    gotoList(keyword){
+      // 跳转页面
+      wx.navigateTo({ url: '/pages/goods_list/main' + '?keyword='+keyword });
     }
   }
 }
