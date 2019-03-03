@@ -13,3 +13,6 @@ export const getCateList = () => request.get("categories");
 
 // 获取列表数据
 export const getGoodsList = obj => request.get("goods/search", obj);
+
+// 获取提示列表
+export const getTips= obj => request.get("goods/qsearch", obj);
