@@ -37,20 +37,40 @@ export default {
       keyword:'',
       tabs:["综合","销量","价格"],
       tabIndex:0,
-      goodsList:[]
+      goodsList:[],
+      pagenum:1,
+      pagesize:20
     }
   },
+  // onLoad 生命周期函数
   onLoad(options){
     this.keyword = options.keyword;
-    getGoodsList({
-      query:  this.keyword
-    }).then(res=>{
-      this.goodsList = res.data.message.goods;
-    })
+    this.getGoodsData();
+  },
+  // 上拉触底事件
+  onReachBottom(){
+    console.log('上拉触底了')
+    this.getGoodsData();
   },
   methods: {
     changeTab(index){
       this.tabIndex = index;
+    },
+    // 获取页面数据的方法
+    getGoodsData(){
+      getGoodsList({
+        query:  this.keyword,
+        pagenum: this.pagenum,
+        pagesize: this.pagesize
+      }).then(res=>{
+        // 请求成功后，要考虑的事情
+        // 1. 把请求回来的数据，赋值给 goodsList
+        // this.goodsList = res.data.message.goods;
+        // this.goodsList = this.goodsList.concat(res.data.message.goods);
+        this.goodsList = [...this.goodsList, ...res.data.message.goods];
+        // 2. 页数要加1
+        this.pagenum++;
+      })
     }
   }
 
