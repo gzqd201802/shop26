@@ -17,7 +17,7 @@
     <!-- 商品列表 -->
     <view class="goods-list">
       <block v-for="(item,index) in goodsList" :key="index">
-        <view class="goods-item">
+        <view class="goods-item" @tap="gotoDetail(item.goods_id)">
           <image :src="item.goods_small_logo"></image>
           <view class="goods-right">
             <view class="goods-title">{{ item.goods_name }}</view>
@@ -70,6 +70,10 @@ export default {
 
   },
   methods: {
+    // 点击商品跳转到商品详情页
+    gotoDetail(id){
+      wx.navigateTo({ url: '/pages/goods_detail/main?goods_id='+id });
+    },
     // 跳转到搜索页
     gotoSearch(){
       wx.navigateTo({ url: '/pages/search/main?keyword=' + this.keyword });
