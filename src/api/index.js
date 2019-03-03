@@ -10,3 +10,6 @@ export const getFloor = () => request.get("home/floordata");
 
 // 分类数据
 export const getCateList = () => request.get("categories");
+
+// 获取列表数据
+export const getGoodsList = obj => request.get("goods/search", obj);

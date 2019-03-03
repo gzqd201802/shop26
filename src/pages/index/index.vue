@@ -63,7 +63,6 @@ export default {
   },
   mounted () {
 
-
     getSwiper().then(res=>{
       this.imgUrls = res.data.message;
     });
