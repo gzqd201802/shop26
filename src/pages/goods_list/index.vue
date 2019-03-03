@@ -26,6 +26,10 @@
         </view>
       </block>
     </view>
+    <!-- 触底提示 -->
+    <view class="loading" v-show="!hasMore">
+      我也是有底线的...
+    </view>
   </view>
 </template>
 
@@ -48,23 +52,43 @@ export default {
     this.keyword = options.keyword;
     this.getGoodsData();
   },
+  onUnload(){
+    this.initData();
+  },
   // 上拉触底事件
   onReachBottom(){
-    console.log('上拉触底了')
+    // console.log('上拉触底了')
     this.getGoodsData();
   },
+  // 下拉刷新触发的页面事件
+  onPullDownRefresh(){
+    // console.log("下拉刷新");
+    // 1. 初始化数据
+    this.initData();
+    // 2. 请求数据
+    this.getGoodsData();
+
+  },
   methods: {
+    initData(){
+       // 由于Mpvue 会把页面的data数据缓存起来，所以注意重新设置一下，防止页面使用的是上次打开时候的数据
+      this.goodsList = [];
+      this.pagenum = 1;
+      this.pagesize = 20;
+      this.hasMore = true;
+    },
     changeTab(index){
       this.tabIndex = index;
     },
     // 获取页面数据的方法
     getGoodsData(){
+
       // 如果 hasMore 为假，就不发送请求了
       if( !this.hasMore ) return;
 
       wx.showLoading({
         title: '加载中'
-      })
+      });
       getGoodsList({
         query:  this.keyword,
         pagenum: this.pagenum,
@@ -83,6 +107,7 @@ export default {
         // 2. 页数要加1
         this.pagenum++;
         wx.hideLoading();
+        wx.stopPullDownRefresh();
       })
     }
   }
