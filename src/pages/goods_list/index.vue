@@ -1,7 +1,7 @@
 <template>
   <view>
     <!-- 搜索框 -->
-    <view class="search-wrapper">
+    <view class="search-wrapper" @tap="gotoSearch">
       <view class="search-input">
         <icon type="search" size="16"></icon> {{ keyword }}
       </view>
@@ -70,6 +70,11 @@ export default {
 
   },
   methods: {
+    // 跳转到搜索页
+    gotoSearch(){
+      wx.navigateTo({ url: '/pages/search/main?keyword=' + this.keyword });
+    },
+    // 初始化数据
     initData(){
        // 由于Mpvue 会把页面的data数据缓存起来，所以注意重新设置一下，防止页面使用的是上次打开时候的数据
       this.goodsList = [];
