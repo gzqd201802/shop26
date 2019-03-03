@@ -1,10 +1,29 @@
 <template>
   <view>
+    <!-- 搜索框 -->
     <view class="search-wrapper">
       <view class="search-input">
         <icon type="search" size="16"></icon>
-        <input type="text" :value="keyword" placeholder="请输入想要的内容..." />
+        <input type="text"
+          placeholder="请输入想要的内容..."
+          v-model="inputVal"
+          @confirm="confirmInput"
+         />
       </view>
+      <button class="cancel" size="mini">取消</button>
+    </view>
+    <!-- 历史搜索标题 -->
+    <view class="history-title">
+      <view class="title-txt">历史搜索</view>
+      <icon type="clear" size="14"></icon>
+    </view>
+    <!-- 搜索历史列表 -->
+    <view class="list">
+      <block v-for="(item,index) in historyList" :key="index">
+        <view class="list-item">
+          {{ item }}
+        </view>
+      </block>
     </view>
   </view>
 </template>
@@ -13,11 +32,23 @@
 export default {
   data(){
     return{
-      keyword:""
+      inputVal: "",
+      historyList: []
     }
   },
   onLoad(options){
-    this.keyword = options.keyword;
+    // this.keyword = options.keyword;
+    this.inputVal = options.keyword;
+  },
+  methods: {
+    confirmInput(){
+      // 1. 把输入框的内容，添加到搜索历史数组中
+      this.historyList.unshift(this.inputVal);
+
+      // ES6 数组去重
+      this.historyList = [...new Set(this.historyList)];
+
+    }
   }
 }
 </script>
@@ -64,7 +95,7 @@ export default {
 
 .list{
     padding:10rpx;
-    span{
+    &-item{
         display: inline-block;
         padding:0 20rpx;
         line-height: 2;
@@ -72,5 +103,4 @@ export default {
         margin:10rpx;
     }
 }
-
 </style>
