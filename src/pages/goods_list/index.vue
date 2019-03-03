@@ -39,7 +39,8 @@ export default {
       tabIndex:0,
       goodsList:[],
       pagenum:1,
-      pagesize:20
+      pagesize:20,
+      hasMore:true
     }
   },
   // onLoad 生命周期函数
@@ -58,18 +59,30 @@ export default {
     },
     // 获取页面数据的方法
     getGoodsData(){
+      // 如果 hasMore 为假，就不发送请求了
+      if( !this.hasMore ) return;
+
+      wx.showLoading({
+        title: '加载中'
+      })
       getGoodsList({
         query:  this.keyword,
         pagenum: this.pagenum,
         pagesize: this.pagesize
       }).then(res=>{
+        let goods = res.data.message.goods
+        // 如果请求的长度已经不足够20条，hasMore 的值就要被修改成假，代表没有数据了
+        if( goods.length < this.pagesize ){
+          this.hasMore = false;
+        }
         // 请求成功后，要考虑的事情
         // 1. 把请求回来的数据，赋值给 goodsList
         // this.goodsList = res.data.message.goods;
         // this.goodsList = this.goodsList.concat(res.data.message.goods);
-        this.goodsList = [...this.goodsList, ...res.data.message.goods];
+        this.goodsList = [...this.goodsList, ...goods];
         // 2. 页数要加1
         this.pagenum++;
+        wx.hideLoading();
       })
     }
   }
