@@ -17,6 +17,38 @@
         <view class="address-border"></view>
       </view>
       <!-- 购物车列表 -->
+      <view class="list-title">
+        品优购生活馆
+      </view>
+      <view class="ware-list">
+        <block v-for="(item, key) in cartList" :key="key">
+          <view class="ware-item">
+            <view class="chooice-button" @tap="chooseGoods(key)">
+              <view class="iconfont " :class="item.selected ? 'icon-xuanze-fill' : 'icon-xuanze'"></view>
+            </view>
+            <view class="ware-info">
+              <div class="ware-content">
+                <div class="ware-image">
+                  <image :src="item.goods_small_logo"></image>
+                </div>
+                <div class="ware-info">
+                    <div class="ware-title">{{ item.goods_name }}</div>
+                    <div class="ware-info-btm">
+                      <div class="ware-price">
+                        ￥{{ item.goods_price }}
+                      </div>
+                      <div class="calculate">
+                        <div class="rect" @tap="countHandle(key,-1)">-</div>
+                        <div class="number">{{ item.count }}</div>
+                        <div class="rect" @tap="countHandle(key,1)">+</div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </view>
+          </view>
+        </block>
+      </view>
       <!-- 全选结算条 -->
     </view>
 </template>
@@ -29,13 +61,44 @@ export default {
         userName:"",
         telNumber:"",
         addressInfo:""
-      }
+      },
+      cartList:{}
     }
   },
   onShow(){
     this.address = wx.getStorageSync('address') || {};
+    this.cartList = wx.getStorageSync('cartList') || {};
   },
   methods:{
+    // 点击左右加减控制数量
+    countHandle(key,num){
+      // 判断是否为 1 ???
+      if(this.cartList[key].count === 1){
+        wx.showModal({
+          content: '是否删除商品', //提示的内容,
+          showCancel: true, //是否显示取消按钮,
+          confirmText: '删除', //确定按钮的文字，默认为取消，最多 4 个字符,
+          confirmColor: 'red', //确定按钮的文字颜色,
+          success: res => {
+            if (res.confirm) {
+              delete this.cartList[key];
+              // console.log(this.cartList);
+              // MpVue 的 bug，对象改变了，但是没实现双向绑定
+              // 把旧对象处理成全新对象，再重复赋值，即可更新视图
+              this.cartList = JSON.parse(JSON.stringify(this.cartList));
+            } else if (res.cancel) {
+              this.cartList[key].count += 1;
+            }
+          }
+        });
+      }
+      // 这个地方和上面的判断存在逻辑上的 bug，请思考怎么修复
+      this.cartList[key].count += num;
+    },
+    // 点击选中商品图标
+    chooseGoods(key){
+      this.cartList[key].selected = !this.cartList[key].selected;
+    },
     // 点击购物车顶部实现选择收获地址
     chooseAddress(){
       // 调用微信小程序自带的收货地址功能
@@ -147,7 +210,7 @@ export default {
   padding-bottom: 20rpx;
 }
 .ware-image {
-  img {
+  image {
     display: block;
     width: 200rpx;
     height: 200rpx;
