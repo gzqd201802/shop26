@@ -13,5 +13,5 @@ export default {
 </script>
 
 <style>
-
+@import "style/iconfont.wxss";
 </style>
