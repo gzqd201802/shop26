@@ -38,7 +38,7 @@
         <view class="iconfont icon-gouwuche"></view>
         <view class="text">购物车</view>
       </navigator>
-      <view class="ft-right">
+      <view class="ft-right" @tap="addToCart(detail.goods_id)">
         加入购物车
       </view>
       <view class="ft-right">
@@ -68,6 +68,39 @@ export default {
     })
   },
   methods: {
+    // 点击加入购物车按钮
+    addToCart(id){
+      // 防止还没获取到数据的时候，点击了购物车
+      if(!id) return;
+
+      // 获取本地存储，如果没有
+      let cartList = wx.getStorageSync('cartList') || {};
+
+      // 添加选中状态
+      this.detail.selected = true;
+
+      // 判断本地数据是否已经存在过 id 值，如果有就累加1，如果没有就初始化成 1
+      if(cartList[id]){
+        // 直接找到本地存储，加1
+        cartList[id].count++;
+      }else{
+        // 添加数量
+        this.detail.count = 1;
+         // 存储到本地
+        cartList[id] = this.detail;
+      }
+      // 添加到本地存储
+      wx.setStorageSync('cartList', cartList);
+      // 添加后的提示
+      wx.showToast({
+        title: '添加成功', //提示的内容,
+        icon: 'success', //图标,
+        duration: 1000, //延迟时间,
+        mask: true, //显示透明蒙层，<防止触摸穿透>
+        success: res => {}
+      });
+
+    },
     // 点击预览大图
     previewImg(current){
       // 数据格式不一致的时候，可以自己处理成合适的数据格式
