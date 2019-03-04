@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": 3,
 			"list": [
 				{
 					"id": -1,
@@ -50,6 +50,13 @@
 					"name": "搜索页",
 					"pathName": "pages/search/main",
 					"query": "keyword=小米",
+					"scene": null
+				},
+				{
+					"id": 3,
+					"name": "商品详情",
+					"pathName": "pages/goods_detail/main",
+					"query": "goods_id=888",
 					"scene": null
 				}
 			]

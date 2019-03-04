@@ -105,7 +105,7 @@ export default {
       }).then(res=>{
         let goods = res.data.message.goods
         // 如果请求的长度已经不足够20条，hasMore 的值就要被修改成假，代表没有数据了
-        if( goods.length < this.pagesize ){
+        if( goods.length < this.pagesize || goods.length === res.data.message.total){
           this.hasMore = false;
         }
         // 请求成功后，要考虑的事情
