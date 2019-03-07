@@ -13,7 +13,6 @@ export default {
       // console.log(e);
       let { encryptedData, iv, rawData, signature } = e.mp.detail;
       console.log(encryptedData, iv, rawData, signature);
-
         wx.login({
             success(res) {
                 if (res.code) {
@@ -29,9 +28,14 @@ export default {
                     }).then(res=>{
                       let {token} = res.data.message;
                       if(token){
+                        // 获取token 保存到本地
                         wx.setStorageSync('token',token);
+                        // 跳转返回上一页
+                        wx.navigateBack({
+                          delta: 1
+                        })
                       }
-                    })
+                    });
                 } else {
                     console.log('登录失败！' + res.errMsg)
                 }
