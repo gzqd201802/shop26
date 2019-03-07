@@ -19,3 +19,9 @@ export const getTips = obj => request.get("goods/qsearch", obj);
 
 // 获取商品详情
 export const getDetail = obj => request.get("goods/detail", obj);
+
+// 换取token的接口
+export const getToken = obj => request.post("users/wxlogin", obj);
+
+//----------- 以下接口请求都要授权登录后才能访问 -----------
+export const orderCreate = obj => request.auth("my/orders/create", obj);
