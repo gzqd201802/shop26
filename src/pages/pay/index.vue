@@ -111,13 +111,14 @@ export default {
         let goods = [];
         for(let key in this.cartList){
           let item = this.cartList[key];
-
-          goods.push({
-            "goods_id":item.goods_id,
-            "goods_number":item.count,
-            "goods_price":item.goods_price
-          });
-
+          // 如果选中，才添加到订单中
+          if(item.selected){
+            goods.push({
+              "goods_id":item.goods_id,
+              "goods_number":item.count,
+              "goods_price":item.goods_price
+            });
+          }
         }
         // 1. 向自家服务器发起请求
         orderCreate({
@@ -138,7 +139,7 @@ export default {
                 // 调用微信支付
                 wx.requestPayment({
                   ...wxorder,
-                  success: res => {
+                  success:res=>{
                     // console.log("支付成功",res);
                     // 把已经支付的商品在购物车列表中删除掉
                     for(let key in this.cartList){

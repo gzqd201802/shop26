@@ -105,7 +105,7 @@ export default {
       // 购物车列表长度
       this.cartLength = Object.keys(this.cartList).length;
       // 更新本地存储数据
-      wx.setStorageSync('cartList',this.cartList);
+      wx.setStorageSync('cartList', this.cartList);
       // 返回值 return 返回总价格
       return _allPrice;
     },

@@ -18,7 +18,9 @@ function request(url, method = "GET", data = {}, header = {}) {
     });
   });
 }
-
+// itjustfun 服务器可能登陆的时候失败
+request.baseURL = "https://itjustfun.cn/api/public/v1/";
+// 如果登录失败，换成第二台服务器
 request.baseURL = "https://autumnfish.cn/wx/api/public/v1/";
 
 request.get = (url, data) => {
