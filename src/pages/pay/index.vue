@@ -111,11 +111,13 @@ export default {
         let goods = [];
         for(let key in this.cartList){
           let item = this.cartList[key];
+
           goods.push({
             "goods_id":item.goods_id,
             "goods_number":item.count,
             "goods_price":item.goods_price
-          })
+          });
+
         }
         // 1. 向自家服务器发起请求
         orderCreate({

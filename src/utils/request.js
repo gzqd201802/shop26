@@ -34,13 +34,14 @@ request.auth = (url, data) => {
   // 获取本地的token值
   let token = wx.getStorageSync("token");
   if (token) {
+    // 如果本地有 token 值，在发送的请求头带上 token 的信息
     return request(request.baseURL + url, "POST", data, {
       Authorization: token
     });
   } else {
-    // 如果没有 token 就跳转到授权页
+    // 如果没有 token 就跳转到授权页，登录授权换取 token
     wx.navigateTo({ url: "/pages/auth/main" });
-    // 返回一个空 Promise 对象，防止在回调函数中报错
+    // 返回一个空 Promise 对象，防止在 then() 回调函数中报错
     return new Promise(() => {});
   }
 };
