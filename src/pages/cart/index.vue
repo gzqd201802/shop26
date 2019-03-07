@@ -58,9 +58,9 @@
           <view class="colorRed">合计：￥{{ allPrice }}</view>
           <view class="price-tips">包运费</view>
         </view>
-        <view class="accounts">
+        <navigator url="/pages/pay/main" class="accounts">
           结算（{{ allCount }}）
-        </view>
+        </navigator>
       </view>
     </view>
 </template>

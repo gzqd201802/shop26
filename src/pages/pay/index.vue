@@ -22,7 +22,7 @@
       </view>
       <view class="ware-list">
         <block v-for="(item, key) in cartList" :key="key">
-          <view class="ware-item" @tap="gotoDetail(key)">
+          <view class="ware-item" @tap="gotoDetail(key)" v-if="item.selected">
             <view class="ware-info">
               <div class="ware-content">
                 <div class="ware-image">
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { orderCreate } from "@/api";
+import { orderCreate,orderPay } from "@/api";
 export default {
   data(){
     return{
@@ -100,7 +100,7 @@ export default {
     this.cartList = wx.getStorageSync('cartList') || {};
   },
   methods:{
-    // 支付按钮
+    // 支付按钮！！！！！！！！！！！
     payHandle(){
       // 点击支付按钮的时候，先看用户是否授权，授权后，会向服务器换取token，并存到本地
       let token = wx.getStorageSync('token');
@@ -117,12 +117,55 @@ export default {
             "goods_price":item.goods_price
           })
         }
-        // 向自家服务器发起请求
+        // 1. 向自家服务器发起请求
         orderCreate({
           order_price: this.allPrice,
           consignee_addr: this.address.addressInfo,
           goods: goods
-        });
+        }).then(res=>{
+          // 创建订单成功后，获取订单号
+          let { order_number } = res.data.message;
+          // console.log(order_number)
+          if(order_number){
+            // 生产微信支付所需的信息
+            orderPay({
+              order_number
+            }).then(res=>{
+              let { wxorder } = res.data.message;
+              if(wxorder){
+                // 调用微信支付
+                wx.requestPayment({
+                  ...wxorder,
+                  success: res => {
+                    // console.log("支付成功",res);
+                    // 把已经支付的商品在购物车列表中删除掉
+                    for(let key in this.cartList){
+                      let item = this.cartList[key];
+                      if(item.selected){
+                        delete this.cartList[key];
+                      }
+                    }
+                    this.cartList = JSON.parse(JSON.stringify(this.cartList));
+                    // 更新本地存储
+                    wx.setStorageSync('cartList',this.cartList);
+                    // 跳转购物车
+                    wx.switchTab({ url: '/pages/cart/main' });
+                  },
+                  fail: () => {
+                    // console.log("支付失败");
+                    wx.showToast({
+                      title: '支付失败', //提示的内容,
+                      image:'/static/images/cha.png',
+                      duration: 1000, //延迟时间,
+                      mask: true, //显示透明蒙层，防止触摸穿透,
+                      success: res => {}
+                    });
+                  }
+                });
+              }
+            })
+          }
+        })
       }
     },
     // 点击跳转到商品详情

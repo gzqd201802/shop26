@@ -24,4 +24,7 @@ export const getDetail = obj => request.get("goods/detail", obj);
 export const getToken = obj => request.post("users/wxlogin", obj);
 
 //----------- 以下接口请求都要授权登录后才能访问 -----------
+// 创建订单
 export const orderCreate = obj => request.auth("my/orders/create", obj);
+// 支付订单
+export const orderPay = obj => request.auth("my/orders/req_unifiedorder", obj);
