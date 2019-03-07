@@ -22,8 +22,8 @@
       </view>
       <view class="ware-list">
         <block v-for="(item, key) in cartList" :key="key">
-          <view class="ware-item">
-            <view class="chooice-button" @tap="chooseGoods(key)">
+          <view class="ware-item" @tap="gotoDetail(key)">
+            <view class="chooice-button" @tap.stop="chooseGoods(key)">
               <view class="iconfont " :class="item.selected ? 'icon-xuanze-fill' : 'icon-xuanze'"></view>
             </view>
             <view class="ware-info">
@@ -38,9 +38,9 @@
                         ￥{{ item.goods_price }}
                       </div>
                       <div class="calculate">
-                        <div class="rect" @tap="countHandle(key,-1)">-</div>
+                        <div class="rect" @tap.stop="countHandle(key,-1)">-</div>
                         <div class="number">{{ item.count }}</div>
-                        <div class="rect" @tap="countHandle(key,1)">+</div>
+                        <div class="rect" @tap.stop="countHandle(key,1)">+</div>
                       </div>
                     </div>
                 </div>
@@ -50,6 +50,18 @@
         </block>
       </view>
       <!-- 全选结算条 -->
+      <view class="cart-total">
+        <view class="total-button" @tap="selectAll(allCount == cartLength)">
+          <view class="iconfont " :class=" allCount == cartLength ? 'icon-xuanze-fill' : 'icon-xuanze'"></view>
+        </view>
+        <view class="total-center">
+          <view class="colorRed">合计：￥{{ allPrice }}</view>
+          <view class="price-tips">包运费</view>
+        </view>
+        <view class="accounts">
+          结算（{{ allCount }}）
+        </view>
+      </view>
     </view>
 </template>
 
@@ -62,18 +74,71 @@ export default {
         telNumber:"",
         addressInfo:""
       },
-      cartList:{}
+      cartList:{},
+      allCount:0,
+      cartLength: 0
     }
+  },
+  computed: {
+    // 计算总数
+    allPrice(){
+      // 总价格
+      let _allPrice = 0;
+      // 选中的总数
+      let _allCount = 0;
+      // // 购物车长度
+      // let _cartLength = 0;
+
+      // 遍历购物车对象 用 for in
+      for(var key in this.cartList){
+        let item = this.cartList[key];
+        // 如果是选中状态
+        if(item.selected){
+          // 计算总价格
+          _allPrice += item.goods_price * item.count;
+          // 计算总个数
+          _allCount++;
+        }
+      }
+      // 赋值给 this.allCount，可以改变总个数
+      this.allCount = _allCount;
+      // 购物车列表长度
+      this.cartLength = Object.keys(this.cartList).length;
+      // 更新本地存储数据
+      wx.setStorageSync('cartList',this.cartList);
+      // 返回值 return 返回总价格
+      return _allPrice;
+    },
+    // allCount(){
+    //   let _allCount = 0;
+    //   for(var key in this.cartList){
+    //     let item = this.cartList[key];
+    //     if(item.selected){
+    //       _allCount++;
+    //     }
+    //   }
+    //   return _allCount;
+    // }
   },
   onShow(){
     this.address = wx.getStorageSync('address') || {};
     this.cartList = wx.getStorageSync('cartList') || {};
   },
   methods:{
+    // 点击跳转到商品详情
+    gotoDetail(id){
+      wx.navigateTo({ url: '/pages/goods_detail/main?goods_id='+id });
+    },
+    // 全选按钮
+    selectAll(bl){
+      for(let key in this.cartList){
+        this.cartList[key].selected = !bl;
+      }
+    },
     // 点击左右加减控制数量
     countHandle(key,num){
       // 判断是否为 1 ???
-      if(this.cartList[key].count === 1){
+      if(this.cartList[key].count === 1 && num === -1){
         wx.showModal({
           content: '是否删除商品', //提示的内容,
           showCancel: true, //是否显示取消按钮,
@@ -108,7 +173,7 @@ export default {
           // let userName = res.userName;
           // 解构赋值写法 - 和上一行代码功能相同
           // let { userName } = res;
-          
+
           let { userName,provinceName,cityName,countyName,detailInfo,telNumber } = res;
           // 拼接收获地址
           this.address = {
